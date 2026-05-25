@@ -75,16 +75,20 @@ function initScrollAnimations() {
 function highlightCurrentSection() {
     const sections = document.querySelectorAll('section[id]');
     const scrollPosition = window.scrollY + 130;
+    let currentSectionId = 'home';
 
     sections.forEach(section => {
-        const id = section.getAttribute('id');
-        const link = document.querySelector(`.nav-link[href*="${id}"]`);
-        if (!link) return;
+        if (section.offsetTop <= scrollPosition) {
+            currentSectionId = section.getAttribute('id');
+        }
+    });
 
-        if (section.offsetTop <= scrollPosition && section.offsetTop + section.offsetHeight > scrollPosition) {
-            link.classList.add('active');
+    document.querySelectorAll('.nav-link').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === 'index.html' || href === './index.html') {
+            link.classList.toggle('active', currentSectionId === 'home');
         } else {
-            link.classList.remove('active');
+            link.classList.toggle('active', href === `#${currentSectionId}`);
         }
     });
 }
